@@ -1,45 +1,56 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org"
-      xmlns:layout = "http://www.ultraq.net.nz/thymeleaf/layout">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, user-scalable=no" />
+<html lang="pt-br"
+      xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
 
-    <title>Exemplo - Login - Spring Security</title>
+  <title>Exemplo - Login - Spring Security</title>
 
-    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="//assets.locaweb.com.br/locastyle/2.0.6/stylesheets/locastyle.css">
-    <style>
-.container {
-width: 100vw;
-height: 100vh;
-background: #6C7A89;
-display: flex;
-flex-direction: row;
-justify-content: center;
-align-items: center;
-position:relative;
+  <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="//assets.locaweb.com.br/locastyle/2.0.6/stylesheets/locastyle.css">
+
+  <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
-.child {
-  width: 50px;
-  height: 50px;
-  background-color: red;
-  /* Centralizar na vertical e na horizontal */
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin: -25px 0 0 -25px; /* aplique margens superior e esquerda negativas para centralizar de verdade o elemento */
-}
-.box {
-width: 300px;
-height: 300px;
-background: #fff;
-}
+
 body {
-margin: 0px;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0d6efd;
 }
-</style>
-  </head>
+
+.login {
+    width: 360px;
+    height: min-content;
+    padding: 20px;
+    border-radius: 12px;
+    background: #ffffff;
+}
+
+.login h1 {
+    font-size: 36px;
+    margin-bottom: 25px;
+}
+
+.login form {
+    font-size: 20px;
+}
+
+.login form .form-group {
+    margin-bottom: 12px;
+}
+
+.login form input[type="submit"] {
+    font-size: 10px;
+    mar
+  </style>
+</head>
 
   <body>
     <div class="row">
@@ -52,42 +63,44 @@ margin: 0px;
           <div class="alert alert-info">Usuário desconectado!</div>
         </div>
 
-        <div class="container">
-          <div class="box">
-          <h5 class="card-header">Informe usuário e senha</h5>
+        <div class="login">
+
+          <h1 class="text-center">Informe usuário e senha</h1>
           <!--<div class="card-body">-->
-            <form th:action="@{/login}" method="post">
-              <div class="form-group">
-                <label
-                  >Login:<input
+            <form th:action="@{/login}" class="needs-validation" method="post">
+              <div class="form-group was-validated">
+                <label class="form-label" for="username">Login:</label>
+                  <input
                     class="form-control"
                     type="text"
                     name="username"
                     placeholder="Usuário"
-                /></label>
+                    required
+                  />
               </div>
 
-              <div class="form-group">
-                <label
-                  >Senha:<input
+              <div class="form-group was-validated">
+                <label class="form-label" for="password">Senha:</label>
+                  <input
                     class="form-control"
                     type="password"
                     name="password"
                     placeholder="Senha"
-                /></label>
+                    required
+                  />
               </div>
 
-              <div class="form-group">
-                <input type="checkbox" id="remember-me" name="remember-me" />
-                <label for="remember-me">Lembrar</label>
+              <div class="form-group form-check">
+                <input type="checkbox" id="remember-me" class="form-check-input" />
+                <label class="form-check-label" for="remember-me">Lembrar</label>
               </div>
 
-              <div class="form-group">
-                <button type="submit" class="btn btn-primary">Login</button>
-              </div>
+
+              <input class="btn btn-sucess w-100" type="submit" value="Login">
+
             </form>
           <!--</div>-->
-          </div>
+
         </div>
       </div>
     </div>
