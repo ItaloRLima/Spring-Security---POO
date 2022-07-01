@@ -1,24 +1,340 @@
-<html xmlns:th="http://thymeleaf.org"
-      xmlns:layout = "http://www.ultraq.net.nz/thymeleaf/layout">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Home</title>
-  <!--Import Google Icon Font-->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-  <!--Import materialize.css-->
-  <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
+  <meta charset="UTF-8">
 
-  <!--Let browser know website is optimized for mobile-->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
+
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+  <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+      *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins',sans-serif;
+        transition: all 0.3s ease;
+      }
+      :root{
+        --white: #fff;
+        --black: #24292d;
+        --nav-main: #4070f4;
+        --switchers-main: #0b3cc1;
+        --light-bg: #F0F8FF;
+      }
+      nav{
+        position: fixed;
+        height: 70px;
+        width: 100%;
+        background: var(--nav-main);
+        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+      }
+      nav .navbar{
+        display: flex;
+        align-items: center;
+        height: 100%;
+        max-width: 1300px;
+        margin: auto;
+        padding: 0 30px;
+        justify-content: space-between;
+      }
+      nav .navbar a{
+        font-size: 30px;
+        font-weight: 500;
+        color: var(--white);
+        text-decoration: none;
+      }
+       .navbar .nav-links{
+         display: flex;
+       }
+       .navbar .nav-links li{
+         margin: 0 8px;
+         list-style: none;
+         display: flex;
+       }
+       .navbar .nav-links a{
+         font-size: 18px;
+         font-weight: 400;
+         opacity: 1;
+       }
+        .navbar .nav-links a:hover{
+          opacity: 1;
+        }
+       .navbar .appearance{
+         display: flex;
+         align-items: center;
+       }
+       .appearance .light-dark,
+       .appearance .icons{
+        height: 50px;
+        width: 50px;
+        border-radius: 6px;
+        line-height: 50px;
+        text-align: center;
+        color: var(--white);
+        font-size: 20px;
+        background: var(--switchers-main);
+        cursor: pointer;
+      }
+      .appearance .light-dark i,
+      .appearance .icons i{
+        opacity: 1;
+      }
+      .appearance .light-dark:hover i,
+      .appearance .icons:hover i{
+        opacity: 1;
+      }
+      .appearance .light-dark:hover{
+        box-shadow: 0 5px 10px rgba(0,0,0,0.1)
+      }
+      .appearance .light-dark i{
+        height: 100%;
+        width: 100%;
+      }
+       .appearance .color-icon{
+         position: relative;
+       }
+       .appearance .icons{
+         width: 70px;
+         height: 50px;
+         margin-left: 14px;
+       }
+       .appearance .color-box{
+         position: absolute;
+         bottom: -133px;
+         right: 0;
+         min-height: 100px;
+         background: var(--white);
+         padding: 16px 20px 20px 20px;
+         border-radius: 6px;
+         box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+         opacity: 0;
+         pointer-events: none;
+       }
+       .color-box::before{
+         content: '';
+         position: absolute;
+         top: -10px;
+         right: 20px;
+         height: 30px;
+         width: 30px;
+         border-radius: 50%;
+         background: var(--white);
+         transform: rotate(45deg);
+       }
+       .color-icon.open .color-box{
+         opacity: 1;
+         pointer-events: auto;
+       }
+        .color-icon.open .arrow{
+          transform: rotate(-180deg);
+        }
+       .appearance .color-box h3{
+         font-size: 16px;
+         font-weight: 600;
+         display: block;
+         color: var(--nav-main);
+         text-align: left;
+         white-space: nowrap;
+         margin-bottom: 10px;
+       }
+      .appearance .color-box .color-switchers{
+         display: flex;
+      }
+      .color-box .color-switchers .btn{
+        display: inline-block;
+        height: 40px;
+        width: 40px;
+        border: none;
+        outline: none;
+        border-radius: 50%;
+        margin: 0 5px;
+        cursor: pointer;
+        background: #4070F4;
+
+      }
+      .color-switchers .btn.blue.active{
+        box-shadow: 0 0 0 2px #fff,
+                    0 0 0 4px #4070F4;
+      }
+      .color-switchers .btn.orange{
+        background: #F79F1F;
+      }
+      .color-switchers .btn.orange.active{
+        box-shadow: 0 0 0 2px #fff,
+                    0 0 0 4px #F79F1F;
+      }
+      .color-switchers .btn.purple{
+        background: #8e44ad;
+      }
+      .color-switchers .btn.purple.active{
+        box-shadow: 0 0 0 2px #fff,
+                    0 0 0 4px #8e44Ad;
+      }
+      .color-switchers .btn.green{
+        background: #3A9943;
+      }
+      .color-switchers .btn.green.active{
+        box-shadow: 0 0 0 2px #fff,
+                    0 0 0 4px #3A9943;
+      }
+      .home-content{
+        height: 100vh;
+        width: 100%;
+        background: var(--light-bg);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 60px;
+      }
+      .home-content h2{
+        color: var(--black);
+        font-size: 50px;
+      }
+      .home-content h3{
+        color: var(--black);
+        font-size: 42px;
+        margin-top: -8px;
+      }
+      .home-content h3 span{
+        color: var(--nav-main);
+      }
+      .home-content h3 span.darkMode{
+        color: var(--black);
+      }
+      .home-content p{
+        color: var(--black);
+        font-size: 16px;
+        width: 45%;
+        text-align: justify;
+        margin: 4px 0 30px 0;
+      }
+      .home-content a{
+        color: #fff;
+        font-size: 20px;
+        padding: 12px 24px;
+        border-radius: 6px;
+        text-decoration: none;
+        background: var(--nav-main);
+      }
+      .home-content a i{
+        transform: rotate(45deg);
+        font-size: 16px;
+      }
+      .home-content a:hover{
+        background: var(--switchers-main);
+      }
+      @media (max-width: 1050px) {
+        .home-content p{
+          width: 70%;
+        }
+      }
+
+  </style>
 </head>
 <body>
-<div>
-  <h3>Bem vindo ao Spring Security!</h3>
-</div>
-<div>
-  <p>Ver Lista de usuarios </p>
-  <a href="http://localhost:8080/usuarios"><button>Acessar</button></a>
+<nav>
+  <div class="navbar">
+    <div class="logo"><a>Notícias</a></div>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="http://localhost:8080/usuarios/add">Registrar-se</a></li>
+      <li><a href="http://localhost:8080/noticias/add">Cadastrar noticias</a></li>
 
-</div>
-<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+    </ul>
+    <div class="appearance">
+      <div class="light-dark"><!--//botão para modo noturno-->
+        <i class="btn fas fa-moon" data-color="#e4e6eb #e4e6eb #24292D #24292D #242526"></i>
+      </div>
+      <div class="color-icon">
+        <div class="icons">
+          <i class="fas fa-palette"></i>
+          <i class="fas fa-sort-down arrow"></i>
+        </div>
+        <div class="color-box">
+          <h3>Color Switcher</h3>
+          <div class="color-switchers">
+            <button class="btn blue active" data-color="#fff #24292d #4070f4 #0b3cc1 #F0F8FF"></button>
+            <button class="btn orange" data-color="#fff #242526 #F79F1F #DD8808 #fef5e6"></button>
+            <button class="btn purple" data-color="#fff #242526 #8e44ad #783993 #eadaf1"></button>
+            <button class="btn green" data-color="#fff #242526 #3A9943 #2A6F31 #DAF1DC"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<section class="home-content">
+  <div class="texts">
+    <h2 class="text">Acesso às principais notícias</h2>
+    <a type="button" class="btn btn-primary btn-sm" href="http://localhost:8080/noticias/principal">Área de noticias</a>
+  </div>
+</section>
+
+
+
+<script>
+  // Js code to make color box enable or disable
+  let colorIcons = document.querySelector(".color-icon"),
+  icons = document.querySelector(".color-icon .icons");
+
+  icons.addEventListener("click" , ()=>{
+    colorIcons.classList.toggle("open");
+  })
+
+  // getting all .btn elements
+  let buttons = document.querySelectorAll(".btn");
+
+  for (var button of buttons) {
+    button.addEventListener("click", (e)=>{ //adding click event to each button
+      let target = e.target;
+
+      let open = document.querySelector(".open");
+      if(open) open.classList.remove("open");
+
+      document.querySelector(".active").classList.remove("active");
+      target.classList.add("active");
+
+      // js code to switch colors (also day night mode)
+      let root = document.querySelector(":root");
+      let dataColor = target.getAttribute("data-color"); //getting data-color values of clicked button
+      let color = dataColor.split(" "); //splitting each color from space and make them array
+
+      //passing particular value to a particular root variable
+      root.style.setProperty("--white", color[0]);
+      root.style.setProperty("--black", color[1]);
+      root.style.setProperty("--nav-main", color[2]);
+      root.style.setProperty("--switchers-main", color[3]);
+      root.style.setProperty("--light-bg", color[4]);
+
+      let iconName = target.className.split(" ")[2]; //getting the class name of icon
+
+      let coloText = document.querySelector(".home-content span");
+
+      if(target.classList.contains("fa-moon")){ //if icon name is moon
+        target.classList.replace(iconName, "fa-sun") //replace it with the sun
+        colorIcons.style.display = "none";
+        coloText.classList.add("darkMode");
+      }else if (target.classList.contains("fa-sun")) { //if icon name is sun
+        target.classList.replace("fa-sun", "fa-moon"); //replace it with the sun
+        colorIcons.style.display = "block";
+        coloText.classList.remove("darkMode");
+        document.querySelector(".btn.blue").click();
+      }
+    });
+  }
+ </script>
 </body>
 </html>
+

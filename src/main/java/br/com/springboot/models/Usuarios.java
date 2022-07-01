@@ -1,36 +1,48 @@
 package br.com.springboot.models;
 
+import com.sun.istack.NotNull;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-public class Usuarios implements UserDetails, Serializable {
-
-private static final long serialVersionUID = 1L;
+public class Usuarios implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
+    private Long id;
+    @NotNull
     private String login;
-
+    @NotNull
+    private String email;
+    @NotNull
     private String nome;
-
+    @NotNull
     private String password;
 
-    @ManyToMany
-    @JoinTable(name = "usuarios_roles",joinColumns = @JoinColumn(name = "usuarios_id",referencedColumnName = "login"),
-    inverseJoinColumns = @JoinColumn(name = "role_id",referencedColumnName = "nomerole"))
-    private List<Role> roles;
-
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }
+    @ManyToMany(cascade =
+            {
+                    CascadeType.DETACH,
+                    CascadeType.MERGE,
+                    CascadeType.REFRESH,
+                    CascadeType.PERSIST
+            }, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "usuarios_roles",
+            joinColumns = @JoinColumn(name = "usuarios_id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id")
+    )
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<Role> roles = new HashSet<>();
 
     public String getLogin() {
         return login;
@@ -48,41 +60,36 @@ private static final long serialVersionUID = 1L;
         this.nome = nome;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return (Collection<? extends GrantedAuthority>) this.roles;
-    }
 
     public String getPassword() {
         return this.password;
     }
 
-    @Override
-    public String getUsername() {
-        return this.login;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

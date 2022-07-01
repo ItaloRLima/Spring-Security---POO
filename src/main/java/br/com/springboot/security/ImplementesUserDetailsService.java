@@ -20,10 +20,10 @@ public class ImplementesUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
 
-        Usuarios usuarios = ur.findByLogin(login);
+        Usuarios usuarios = ur.getUserByUsername(login);
         if(usuarios == null){
             throw new UsernameNotFoundException("Usuário não encontrado");
         }
-        return new User(usuarios.getUsername(), usuarios.getPassword(), true,true,true,true,usuarios.getAuthorities());
+        return new MyUserDetails(usuarios);
     }
 }

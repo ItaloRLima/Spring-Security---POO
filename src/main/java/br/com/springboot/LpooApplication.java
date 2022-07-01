@@ -9,7 +9,6 @@ public class LpooApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(LpooApplication.class, args);
-		System.out.println(new BCryptPasswordEncoder().encode("147258"));
 	}
 
 }
