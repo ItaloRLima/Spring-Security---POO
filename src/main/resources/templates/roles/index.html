@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{fragments/layout-simples.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabela de Roles</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+</head>
+<body>
+<section layout:fragment="content">
+    <div th:switch="${roles}">
+        <div class="card-header">
+            Roles
+        </div>
+        <br/>
+        <h4 th:case="null">Nenhum registro encontrato!</h4>
+        <div th:case="*">
+            <table id="myTable" class="table table-striped" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="role : ${roles}">
+                    <td th:text="${role.nomeRole}"></td>
+                    <td><a th:href="@{/roles/edit/{id}(id=${role.id})}">Edit</a></td>
+                    <td><a th:href="@{/roles/delete/{id}(id=${role.id})}"
+                           id="btnDelete"
+                           class="delete"
+                           data-confirm="Confirma a exclusão?">
+                        Delete</a></td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>Name</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        <a href="/roles/add" class="btn btn-primary">Novo</a>
+    </div>
+</section>
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+</script>
+</body>
+</html>

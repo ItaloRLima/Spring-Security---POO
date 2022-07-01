@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabela de usuários</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+</head>
+<body>
+<section layout:fragment="content">
+    <div th:switch="${usuarios}">
+        <div class="card-header">
+            Usuários
+        </div>
+        <br/>
+        <h4 th:case="null">Nenhum registro encontrato!</h4>
+        <div th:case="*">
+            <table id="myTable" class="table table-striped" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>E-Mail</th>
+                    <th>Papéis</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="usuarios : ${usuarios}">
+                    <td th:text="${usuarios.nome}"></td>
+                    <td th:text="${usuarios.email}"></td>
+                    <td>
+                        <span th:each="role : ${usuarios.roles}">
+                            <span th:text="${role.nomeRole}"
+                                  class="badge rounded-pill bg-secondary">
+                            </span>
+                        </span>
+                    </td>
+                    <td><a th:href="@{/usuarios/edit/{id}(id=${usuarios.id})}"
+                           class="btn btn-primary btn-sm"
+                    >Edit</a></td>
+                    <td><a th:href="@{/usuarios/delete/{id}(id=${usuarios.id})}"
+                           id="btnDelete"
+                           class="delete btn btn-danger btn-sm"
+                           data-confirm="Confirma a exclusão?">
+                        Delete</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <a href="/usuarios/add" class="btn btn-primary">Novo</a>
+    </div>
+</section>
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+</script>
+</body>
+</html>

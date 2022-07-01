@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabela de usuários</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+</head>
+<body>
+<section layout:fragment="content">
+    <div th:switch="${noticias}">
+        <div class="card-header">
+            Usuários
+        </div>
+
+        <h4 th:case="null">Nenhum registro encontrato!</h4>
+        <div class="container" th:case="*">
+
+                <div th:each="noticias : ${noticias}">
+                    <h1 th:text="${noticias.titulo}"></h1>
+                    <span th:text="${noticias.autor}"></span>
+                    <p th:text="${noticias.corpo}"></p>
+                </div>
+            <a type="button" class="btn btn-secondary btn-sm" href="http://localhost:8080/">Voltar para a página inicial</a>
+        </div>
+
+    </div>
+</section>
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+</script>
+</body>
+</html>
